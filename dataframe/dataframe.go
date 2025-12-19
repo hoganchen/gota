@@ -74,6 +74,7 @@ func Empty(colNameMap map[string]string) DataFrame {
 
 	for k, v := range colNameMap {
 		columns[index] = series.New([]interface{}{}, series.Type(v), k)
+		index += 1
 	}
 
 	df := DataFrame{
