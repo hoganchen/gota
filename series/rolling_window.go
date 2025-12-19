@@ -34,6 +34,24 @@ func (r RollingWindow) StdDev() (s Series) {
 	return
 }
 
+func (r RollingWindow) Max() (s Series) {
+	s = New([]float64{}, Float, "Max")
+	for _, block := range r.getBlocks() {
+		s.Append(block.Max())
+	}
+
+	return
+}
+
+func (r RollingWindow) Min() (s Series) {
+	s = New([]float64{}, Float, "Min")
+	for _, block := range r.getBlocks() {
+		s.Append(block.Min())
+	}
+
+	return
+}
+
 func (r RollingWindow) getBlocks() (blocks []Series) {
 	for i := 1; i <= r.series.Len(); i++ {
 		if i < r.window {

@@ -123,11 +123,11 @@ const (
 // Indexes represent the elements that can be used for selecting a subset of
 // elements within a Series. Currently supported are:
 //
-//     int            // Matches the given index number
-//     []int          // Matches all given index numbers
-//     []bool         // Matches all elements in a Series marked as true
-//     Series [Int]   // Same as []int
-//     Series [Bool]  // Same as []bool
+//	int            // Matches the given index number
+//	[]int          // Matches all given index numbers
+//	[]bool         // Matches all elements in a Series marked as true
+//	Series [Int]   // Same as []int
+//	Series [Bool]  // Same as []bool
 type Indexes interface{}
 
 // New is the generic Series constructor
@@ -839,4 +839,28 @@ func (s Series) Slice(j, k int) Series {
 	}
 
 	return s.Subset(idxs)
+}
+
+func (s Series) Diff() (diffSeries Series) {
+	values := s.Float()
+	diffSeries = New([]interface{}{}, s.t, "Diff")
+	diffSeries.Append(0.0)
+
+	for i := 1; i < len(values); i++ {
+		diffSeries.Append(values[i] - values[i-1])
+	}
+
+	return
+}
+
+func (s Series) DiffPercent() (diffPercentSeries Series) {
+	values := s.Float()
+	diffPercentSeries = New([]interface{}{}, s.t, "DiffPercent")
+	diffPercentSeries.Append(0.0)
+
+	for i := 1; i < len(values); i++ {
+		diffPercentSeries.Append((values[i] - values[i-1]) / values[i-1] * 100)
+	}
+
+	return
 }
